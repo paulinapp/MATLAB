@@ -1,0 +1,113 @@
+\documentclass[12pt]{amsbook}
+
+\usepackage{amssymb} 
+\usepackage{graphicx} 
+\usepackage{minted}
+\usepackage{url}
+\usepackage{xcolor}
+\definecolor{bookColor}{RGB}{19,9,46}  % 0.90\% of black
+\color{bookColor}
+
+\usepackage{lipsum}
+\newenvironment{bottompar}{\par\vspace*{\fill}}{\clearpage}
+
+
+% tekst pisany jest pochyłą czcionkś:
+\newtheorem{twierdzenie}{Twierdzenie}[chapter] % to jest główne środowisko, ono musi być zdefiniowane jako pierwsze
+\newtheorem{lemat}[twierdzenie]{Lemat} 
+% tekst pisany jest prostą czcionką:
+\theoremstyle{definition}
+\newtheorem{definicja}[twierdzenie]{Definicja}
+\newtheorem{obserwacja}[twierdzenie]{Obserwacja}
+\newtheorem{stw}[twierdzenie]{Stwierdzenie}
+\newtheorem{uwaga}[twierdzenie]{Uwaga}
+\newtheorem{przyklad}[twierdzenie]{Przyk\l{}ad}
+
+\usepackage{mathrsfs}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\selectlanguage{polish}
+\usepackage{listings}
+\usepackage{matlab-prettifier}
+\lstset{style=Matlab-editor}
+
+\usepackage{scalerel}[2016/12/29]
+
+\newcommand\Searrow{\scaleobj{0.7}{\searrow}}
+
+\setlength\parindent{20pt}
+
+\renewcommand\citeform[1]{{#1}}
+
+
+\usepackage{geometry}
+\geometry{margin=1.25in}
+\usepackage{fancyhdr}
+
+\usepackage{xcolor}
+\newcommand\textlcsc[1]{\textsc{\MakeLowercase{#1}}}
+
+
+\begin{document}
+
+\begin{center}
+\large{Laboratorium 5}\\
+\today
+\end{center}
+
+\hspace{3cm}
+
+\begin{center}
+\textsc{Jeszcze więcej o wykresach}\\
+\end{center}
+
+\hspace{3cm}
+
+
+\begin{center}
+2--wymiarowe\\
+\end{center}
+
+\url{https://www.mathworks.com/help/symbolic/fplot.html}
+
+
+
+\hspace{3cm}
+
+
+\begin{center}
+3--wymiarowe\\
+\end{center}
+
+\url{https://www.mathworks.com/help/symbolic/fsurf.html}
+
+
+
+\hspace{3cm}
+
+\begin{center}
+\textsc{Zadania}\\
+\end{center}
+
+\begin{enumerate}
+
+\item Proszę wykreślić w trójwymiarze funkcję $\cos(x) \cdot \sin(y)$ \\
+dla $x \in [-3,3]$ i $y \in [-4,4]$.
+ Do stworzenia wykresu można użyć dowolnej funkcji pozwalającej na kreślenie
+wykresów 3d.
+
+\item Proszę narysować symbolicznie trójwymiarowy wykres funkcji Rastrigina:
+
+$$ y = x_1^2 + x_2^2 - \cos(12x_1) - \cos (18x_2), \ \ x_1 \in [-1,1], \ \ x_2 \in [-1,1]$$
+
+\end{enumerate}
+
+
+\begin{bottompar}
+\begin{flushright}
+Paulina Pełszyńska
+\end{flushright}
+\end{bottompar}
+\end{document}

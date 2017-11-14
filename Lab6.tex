@@ -1,0 +1,282 @@
+\documentclass[12pt]{amsbook}
+
+\usepackage{amssymb} 
+\usepackage{graphicx} 
+\usepackage{minted}
+\usepackage{url}
+\usepackage{xcolor}
+\definecolor{bookColor}{RGB}{19,9,46}  % 0.90\% of black
+\color{bookColor}
+
+\usepackage{lipsum}
+\newenvironment{bottompar}{\par\vspace*{\fill}}{\clearpage}
+
+
+% tekst pisany jest pochyłą czcionkś:
+\newtheorem{twierdzenie}{Twierdzenie}[chapter] % to jest główne środowisko, ono musi być zdefiniowane jako pierwsze
+\newtheorem{lemat}[twierdzenie]{Lemat} 
+% tekst pisany jest prostą czcionką:
+\theoremstyle{definition}
+\newtheorem{definicja}[twierdzenie]{Definicja}
+\newtheorem{obserwacja}[twierdzenie]{Obserwacja}
+\newtheorem{stw}[twierdzenie]{Stwierdzenie}
+\newtheorem{uwaga}[twierdzenie]{Uwaga}
+\newtheorem{przyklad}[twierdzenie]{Przyk\l{}ad}
+
+\usepackage{mathrsfs}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\selectlanguage{polish}
+\usepackage{listings}
+\usepackage{matlab-prettifier}
+\lstset{style=Matlab-editor}
+
+\usepackage{scalerel}[2016/12/29]
+
+\newcommand\Searrow{\scaleobj{0.7}{\searrow}}
+
+\setlength\parindent{20pt}
+
+\renewcommand\citeform[1]{{#1}}
+
+
+\usepackage{geometry}
+\geometry{margin=1.25in}
+\usepackage{fancyhdr}
+
+\usepackage{xcolor}
+\newcommand\textlcsc[1]{\textsc{\MakeLowercase{#1}}}
+
+
+\begin{document}
+
+\begin{center}
+\large{Laboratorium 6}\\
+\today
+\end{center}
+
+\hspace{3cm}
+
+\begin{center}
+\textsc{Analiza Danych w Matlabie}\\
+\end{center}
+
+\hspace{3cm}
+
+
+\begin{center}
+Titanic\\
+\end{center}
+
+\begin{enumerate}
+\item Ze strony:
+
+\url{https://www.kaggle.com/c/titanic/data}
+
+Pobieramy pliki: train.csv oraz test.csv
+
+\item Importujemy dane i patrzymy, jak wyglądają:\\
+
+\begin{lstlisting}
+Train = readtable('train.csv','Format','%f%f%f%q%C%f%f%f%q%f%q%C');
+Test = readtable('test.csv','Format','%f%f%q%C%f%f%f%q%f%q%C');
+disp(Train(1:5,[2:3 5:8 10:11]))
+\end{lstlisting}
+
+\item Sprawdźmy, jaki wpływ na przeżycie miała płeć:\\
+
+\begin{lstlisting}
+disp(grpstats(Train(:,{'Survived','Sex'}), 'Sex'))
+
+\end{lstlisting}
+
+Jeśli w naszym modelu przewidujemy, że przeżyły kobiety, a mężczyźni nie, dokładność tego modelu wyniesie $78,68\%$.
+Dostaniemy jeszcze niższy wynik na test.csv.
+
+\begin{lstlisting}
+gendermdl = grpstats(Train(:,{'Survived','Sex'}), {'Survived','Sex'})
+all_female = (gendermdl.GroupCount('0_male') + gendermdl.GroupCount('1_female'))...
+    / sum(gendermdl.GroupCount)
+
+\end{lstlisting}
+
+\item Missing values\\
+
+Zapewne zauważyliście, że w kolumnie Cabin brakuje niektórych wierszy.
+
+Zobaczmy, czy są jakieś inne zmienne z brakującymi danymi.
+
+Przy okazji zajmiemy się wartościami dziwnymi (jak np. zerowa opłata za rejs).
+
+\begin{lstlisting}
+Train.Fare(Train.Fare == 0) = NaN;      % treat 0 fare as NaN
+Test.Fare(Test.Fare == 0) = NaN;        % treat 0 fare as NaN
+vars = Train.Properties.VariableNames;  % extract column names
+
+figure
+imagesc(ismissing(Train))
+ax = gca;
+ax.XTick = 1:12;
+ax.XTickLabel = vars;
+ax.XTickLabelRotation = 90;
+title('Missing Values')
+\end{lstlisting}
+
+
+Mamy zatem $177$ pasażerów z nieznanym wiekiem.\\
+Jest parę sposobów na radzenie sobie z brakującymi wartościami. Czasem po prostu usuwa się całe wiersze.
+Tutaj jednak zastąpimy je średnią:
+
+\begin{lstlisting}
+
+avgAge = nanmean(Train.Age)             % get average age
+Train.Age(isnan(Train.Age)) = avgAge;   % replace NaN with the average
+Test.Age(isnan(Test.Age)) = avgAge;     % replace NaN with the average
+
+\end{lstlisting}
+
+Mamy 15 pasażerów z nieznaną opłatą za przejazd.
+Rozsądne jest założenie, że opłaty różniły się w zależności od klasy.
+
+
+\begin{lstlisting}
+
+fare = grpstats(Train(:,{'Pclass','Fare'}),'Pclass');   % get class average
+disp(fare)
+for i = 1:height(fare) % for each |Pclass|
+    % apply the class average to missing values
+    Train.Fare(Train.Pclass == i & isnan(Train.Fare)) = fare.mean_Fare(i);
+    Test.Fare(Test.Pclass == i & isnan(Test.Fare)) = fare.mean_Fare(i);
+end
+\end{lstlisting}
+
+Jeśli idzie o numer Cabin, zauważmy, że tylko pasażerowie pierwszej klasy mieli kilka pokoi.
+Brakujące wartości będziemy tu więc traktowali jako $0$. Podobnie z klasą trzecią, tam numery kabin są nieregularne.
+
+\begin{lstlisting}
+
+% tokenize the text string by white space
+train_cabins = cellfun(@strsplit, Train.Cabin, 'UniformOutput', false);
+test_cabins = cellfun(@strsplit, Test.Cabin, 'UniformOutput', false);
+
+% count the number of tokens
+Train.nCabins = cellfun(@length, train_cabins);
+Test.nCabins = cellfun(@length, test_cabins);
+
+% deal with exceptions - only the first class people had multiple cabins
+Train.nCabins(Train.Pclass ~= 1 & Train.nCabins > 1,:) = 1;
+Test.nCabins(Test.Pclass ~= 1 & Test.nCabins > 1,:) = 1;
+
+% if |Cabin| is empty, then |nCabins| should be 0
+Train.nCabins(cellfun(@isempty, Train.Cabin)) = 0;
+Test.nCabins(cellfun(@isempty, Test.Cabin)) = 0;
+\end{lstlisting}
+
+Dla dwóch pasażerów nie wiemy, skąd wypłynęli. Użyjemy najczęście występującego miejsca.
+Zmienimy to też na wartość liczbową, by łatwiej z tego później korzystać:
+
+\begin{lstlisting}
+% get most frequent value
+freqVal = mode(Train.Embarked);
+
+% apply it to missling value
+Train.Embarked(isundefined(Train.Embarked)) = freqVal;
+Test.Embarked(isundefined(Test.Embarked)) = freqVal;
+
+% convert the data type from categorical to double
+Train.Embarked = double(Train.Embarked);
+Test.Embarked = double(Test.Embarked);
+\end{lstlisting}
+
+
+Podobnie zrobimy z płcią:
+
+\begin{lstlisting}
+
+Train.Sex = double(Train.Sex);
+Test.Sex = double(Test.Sex);
+
+\end{lstlisting}
+
+Usuńmy zmienne, którch używać nie będziemy, bo zawierają dane unikatowe lub brakujące:
+
+\begin{lstlisting}
+
+Train(:,{'Name','Ticket','Cabin'}) = [];
+Test(:,{'Name','Ticket','Cabin'}) = [];
+
+\end{lstlisting}
+
+\item Eksploracja danych i wzualizacja\\
+
+Przeanalizujmy rozkład danych.
+
+Jest to zadanie bardzo czasochłonne, ale i ważne.\\
+Tu zawęzimy się do zmiennej wieku:
+
+\begin{lstlisting}
+
+figure
+histogram(Train.Age(Train.Survived == 0))   % age histogram of non-survivers
+hold on
+histogram(Train.Age(Train.Survived == 1))   % age histogram of survivers
+hold off
+legend('Didn''t Survive', 'Survived')
+title('The Titanic Passenger Age Distribution')
+\end{lstlisting}
+
+
+\item Cechy -- wykorzystujemy powyższe wizualizacje
+
+Dzielimy dane na grupy wzgl. danej zmiennej, czyli u nas np. wieku.
+
+\begin{lstlisting}
+
+% group values into separate bins
+Train.AgeGroup = double(discretize(Train.Age, [0:10:20 65 80], ...
+    'categorical',{'child','teen','adult','senior'}));
+Test.AgeGroup = double(discretize(Test.Age, [0:10:20 65 80], ...
+    'categorical',{'child','teen','adult','senior'}));
+
+\end{lstlisting}
+
+Popatrzmy teraz na opłatę za bilet.
+
+\begin{lstlisting}
+
+figure
+histogram(Train.Fare(Train.Survived == 0));         % fare histogram of non-survivers
+hold on
+histogram(Train.Fare(Train.Survived == 1),0:10:520) % fare histogram of survivers
+hold off
+legend('Didn''t Survive', 'Survived')
+title('The Titanic Passenger Fare Distribution')
+
+% group values into separate bins
+Train.FareRange = double(discretize(Train.Fare, [0:10:30, 100, 520], ...
+    'categorical',{'<10','10-20','20-30','30-100','>100'}));
+Test.FareRange = double(discretize(Test.Fare, [0:10:30, 100, 520], ...
+    'categorical',{'<10','10-20','20-30','30-100','>100'})); 
+
+\end{lstlisting}
+
+
+\end{enumerate}
+
+
+
+
+
+
+
+źródło: \url{https://blogs.mathworks.com/loren/2015/06/18/getting-started-with-kaggle-data-science-competitions/}
+
+
+\begin{bottompar}
+\begin{flushright}
+Paulina Pełszyńska
+\end{flushright}
+\end{bottompar}
+\end{document}
