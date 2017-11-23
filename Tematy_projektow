@@ -1,5 +1,11 @@
-ta strona jest najładniejsza:
+Pobieramy plik ze zbiorem danych oraz plik z ich opisem.
+
+Ta strona jest najładniejsza:
 https://archive.ics.uci.edu/ml/datasets.html?format=&task=&att=num&area=&numAtt=&numIns=&type=&sort=nameUp&view=table
+Wybrałam już kategorię danych numerycznych.
+Jeśli Państwo wolą, można wybrać dane z dowolnej, innej kategorii,
+ale dla takich danych można wykorzystać najwięcej materiału,
+który poznaliśmy na zajęciach.
 
 pozostałe:
 https://vincentarelbundock.github.io/Rdatasets/datasets.html
