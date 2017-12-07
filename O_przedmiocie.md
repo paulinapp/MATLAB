@@ -11,12 +11,18 @@ Dopuszczalne są dwie nieobecności. Pozostałe skutkują obniżeniem oceny.
 rozwiązanych zadań i aktywności.
 Rozwiązania zadań proszę nadsyłać na maila: paupel@student.agh.edu.pl do kolejnych zajęć.
 Za każdy zestaw można dostać max 5 punktów.
-3) Biorąc za 100% sumę punktów z zestawów, mamy następujące oceny
+3) Biorąc za 100% sumę punktów z zestawów, mamy następujące oceny:
+
 Od 90% bardzo dobry
+
 80% dobry plus
+
 70% dobry
+
 60% dostateczny plus
+
 50% dostateczny
+
 poniżej 50% niedostateczny
 
 4) Oprócz tego, dodatkowo liczy się aktywność podczas zajęć.
