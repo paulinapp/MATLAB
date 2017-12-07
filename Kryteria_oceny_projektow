@@ -1,0 +1,34 @@
+Forma projektu:
+
+    1. Opracowanie pisemne: w komentarzach w skryptach
+        - opis ilustrowanego zagadnienia,
+        - opis działania poszczególnych bloków kodu, funkcji (tych napisanych
+        samodzielnie),
+        - instrukcja uruchamiania poszczególnuych skryptów.
+
+    2. Kod w Matlabie:
+        - podzielony na skrypty ( w szczególności każda funkcja w swoim skrypcie z odpowiedznią nazwą).
+
+
+Kryteria oceniania:
+
+    1. Staranność pisemnego opracowania (5p).
+    
+    2. Niezawodność działania dołączonego programu (10p): 
+        - musi poprawnie działać przy podawaniu dopuszczalnych danych użytkownika.
+    
+    3. estetyka w działaniu programu (5p):
+        - np. jeśli program coś rysuje, to powinien sam czyścić na początku okno graficzne,
+        - jeśli czeka na dane z klawiatury, to powinien na ekranie zostawić spację przed kursorem użytkownika,
+        - program nie powinien niepotrzebnie wyświetlać wartości zmiennych itp. 
+    
+    4. Bogactwo wykorzystanych struktur (5p):
+        - czyli wykorzytsanie dostępnych w Matlabie funkcji matematycznych, statystycznych, napisaneie własnych,
+        różne typy wykresów, inne wizualizacje, działania na macierzach...
+        
+Punktacja
+
+    1. Projekt jest wart 50 punktów.
+    
+    2. Zaczynam oceniać z wartością początkową 25 punktów, po czym dodaję lub odejmuję punkty za poszczególne kryteria podane powyżej.
+    
