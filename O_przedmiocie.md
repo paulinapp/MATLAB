@@ -30,4 +30,8 @@ możliwe jest wykonanie zadania dodatkowego - miniprojektu.
 7) Wystawione będą dwie oceny, jedna z laboratorium, opisana powyżej, a druga z projektu.
 Na ich podstawie zostanie wystawiona ocena z przedmiotu.
 
+8) Do zdobycia na zajęciach jest 30 punktów - 6 zestawów po 5p. każdy.
+
+9) Projekt jest wart 50 punktów.
+
 Powodzenia!
