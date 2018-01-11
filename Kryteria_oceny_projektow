@@ -4,7 +4,7 @@ Forma projektu:
         - opis ilustrowanego zagadnienia,
         - opis działania poszczególnych bloków kodu, funkcji (tych napisanych
         samodzielnie),
-        - instrukcja uruchamiania poszczególnuych skryptów.
+        - instrukcja uruchamiania poszczególnych skryptów.
 
     2. Kod w Matlabie:
         - podzielony na skrypty ( w szczególności każda funkcja w swoim skrypcie z odpowiedznią nazwą).
