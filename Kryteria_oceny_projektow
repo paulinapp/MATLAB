@@ -30,6 +30,6 @@ Punktacja
 
     1. Projekt jest wart 50 punktów.
     
-    2. Zaczynam oceniać z wartością początkową 25 punktów, po czym dodaję lub odejmuję punkty za poszczególne 
-    kryteria podane powyżej.
+    2. Zaczynam oceniać z wartością początkową 0 punktów, po czym dodaję lub odejmuję punkty za poszczególne 
+    kryteria podane powyżej i mnożę wynik razy dwa.
     
